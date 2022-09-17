@@ -16,6 +16,13 @@ class Player {
         this.color = color;
     }
 
+    draw() {
+        context.beginPath()
+        context.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false)
+        context.fillStyle = this.color
+        context.fill()
+    }
+
     setPicture() {
         context.drawImage(cat, x, y, catWidth, catHeight);
     }
@@ -54,10 +61,10 @@ class Enemy {
     }
     
     draw() {
-        context.beginPath();
-        context.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-        context.fillStyle = this.color;
-        context.fill();
+        context.beginPath()
+        context.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false)
+        context.fillStyle = this.color
+        context.fill()
     }
 
     update() {
@@ -115,16 +122,37 @@ const spawnEnemies = () => {
 const animate = () => {
 
     requestAnimationFrame(animate);
-    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.clearRect(0, 0, canvas.width, canvas.height); // очищаем кcanvas, чтоб projectiles и enemies были не сплошной линией
     player.setPicture();
-    console.log('animate');
+    // player.draw();
+    
 
     projectiles.forEach(projectile => {
         projectile.update();
     })
 
-    enemies.forEach((enemy) => {
+    enemies.forEach((enemy, index) => {
         enemy.update()
+
+        // Collision with a palyer + end game
+        const distanceToPlayer = Math.hypot(player.x - enemy.x, player.y - enemy.y)
+        if(distanceToPlayer - enemy.radius - player.radius < 1) {
+            console.log('game over')
+        }
+
+
+        projectiles.forEach((projectile, projectileIndex) => {
+            const distance = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y)
+            
+            // Object touch
+            if(distance - enemy.radius - projectile.radius < 1) {
+                // Removing flash when hit an enemy
+                setTimeout(() => {
+                    enemies.splice(index, 1)
+                    projectiles.splice(projectileIndex, 1)
+                }, 0)               
+            }
+        })
     })
 };
 
