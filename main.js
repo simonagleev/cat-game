@@ -77,11 +77,13 @@ class Enemy {
 
 const catWidth = 100;
 const catHeight = 150;
-const x = canvas.width / 2 - catWidth / 2;
-const y = canvas.height / 2 - catHeight / 2;
+// const x = canvas.width / 2 - catWidth / 2;
+// const y = canvas.height / 2 - catHeight / 2;
+const x = canvas.width / 2;
+const y = canvas.height / 2;
 
 
-const player = new Player(x, y, 30, 'red');
+const player = new Player(x, y, 30, 'purple');
 
 const projectiles = [];
 
@@ -119,12 +121,14 @@ const spawnEnemies = () => {
     }, 1000);
 };
 
-const animate = () => {
+let animationId
 
-    requestAnimationFrame(animate);
+const animate = () => {
+    animationId = requestAnimationFrame(animate);
+    
     context.clearRect(0, 0, canvas.width, canvas.height); // очищаем кcanvas, чтоб projectiles и enemies были не сплошной линией
-    player.setPicture();
-    // player.draw();
+    // player.setPicture();
+    player.draw();
     
 
     projectiles.forEach(projectile => {
@@ -134,10 +138,11 @@ const animate = () => {
     enemies.forEach((enemy, index) => {
         enemy.update()
 
-        // Collision with a palyer + end game
+        // Collision with a palyer + END GAME
         const distanceToPlayer = Math.hypot(player.x - enemy.x, player.y - enemy.y)
         if(distanceToPlayer - enemy.radius - player.radius < 1) {
-            console.log('game over')
+            cancelAnimationFrame(animationId)
+            alert('Game over!')
         }
 
 
