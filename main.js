@@ -86,7 +86,7 @@ const x = canvas.width / 2;
 const y = canvas.height / 2;
 
 
-const player = new Player(x, y, 30, 'purple');
+const player = new Player(x, y, 15, '#f4e1d2');
 
 const projectiles = [];
 
@@ -108,7 +108,7 @@ const spawnEnemies = () => {
         }
         
         
-        const color = 'green';
+        const color = `hsl(${Math.random()*360}, 100%, 70%)`;
 
         const angle = Math.atan2(
             canvas.height / 2 - y,
@@ -116,8 +116,8 @@ const spawnEnemies = () => {
         )
     
         const velocity = {
-            x: Math.cos(angle),
-            y: Math.sin(angle)
+            x: Math.cos(angle) *6,
+            y: Math.sin(angle) *6
         }
 
         enemies.push(new Enemy(x, y, radius, color, velocity))
@@ -129,7 +129,8 @@ let animationId
 const animate = () => {
     animationId = requestAnimationFrame(animate);
     
-    context.clearRect(0, 0, canvas.width, canvas.height); // очищаем кcanvas, чтоб projectiles и enemies были не сплошной линией
+    context.fillStyle = 'rgba(0, 0, 0, .1)' //цвет заливки canvas
+    context.fillRect(0, 0, canvas.width, canvas.height); // очищаем кcanvas, чтоб projectiles и enemies были не сплошной линией
     // player.setPicture();
     player.draw();
     
@@ -184,15 +185,15 @@ window.addEventListener('click', (event) => {
     )
 
     const velocity = {
-        x: Math.cos(angle),
-        y: Math.sin(angle)
+        x: Math.cos(angle) *4,
+        y: Math.sin(angle) *4
     }
 
     projectiles.push(new Projectile(
         canvas.width / 2,
         canvas.height / 2,
         5,
-        'red',
+        '#f4e1d2',
         velocity
     ))    
 });
