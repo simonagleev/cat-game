@@ -77,8 +77,11 @@ class Enemy {
 
 const catWidth = 100;
 const catHeight = 150;
+
+// X, Y ДЛЯ КОТА
 // const x = canvas.width / 2 - catWidth / 2;
 // const y = canvas.height / 2 - catHeight / 2;
+
 const x = canvas.width / 2;
 const y = canvas.height / 2;
 
@@ -131,8 +134,21 @@ const animate = () => {
     player.draw();
     
 
-    projectiles.forEach(projectile => {
+    projectiles.forEach((projectile, index) => {
         projectile.update();
+
+        // Delete projecriles, when it leaves the screen
+
+        if(projectile.x + projectile.radius < 0 
+            || projectile.x - projectile.radius > canvas.width 
+            || projectile.y + projectile.radius < 0
+            || projectile.y - projectile.radius > canvas.height 
+        ) {
+            setTimeout(() => {
+                projectiles.splice(index, 1)
+                
+            }, 0) 
+        }
     })
 
     enemies.forEach((enemy, index) => {
